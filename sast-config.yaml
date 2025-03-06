@@ -1,0 +1,30 @@
+entryPoint:
+  - function:
+      package:
+        pattern: .*
+      class:
+        pattern: .*
+      name:
+        pattern: .*
+    overrides: false
+    taint:
+      - kind: UNTRUSTED_DATA
+        annotatedWith: org.springframework.web.bind.annotation.PathVariable
+        pos: arg(*)
+      - kind: UNTRUSTED_DATA
+        annotatedWith: org.springframework.web.bind.annotation.RequestParam
+        pos: arg(*)
+
+sink:
+  - function: java.sql.Statement#executeQuery
+    signature: (java.lang.String) java.sql.ResultSet
+    condition:
+      tainted: UNTRUSTED_DATA
+      pos: arg(0)
+    cwe:
+      - 89
+    note: sql-injection
+
+source: []
+passThrough: []
+cleaner: []
