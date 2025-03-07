@@ -1,4 +1,4 @@
-name: STUB
+name: Analyze with Explyt SAST
 
 on:
  workflow_dispatch:
@@ -10,11 +10,17 @@ permissions:
   security-events: write
 
 jobs:
-  build:
+  analyze:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+      
+      - name: Analyze with Explyt SAST
+        uses: explyt/sast-action@main
+        with:
+          projectRoot: ${{github.workspace}}
+          projectKind: spring
+          config: sast-config.yaml
